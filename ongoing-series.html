@@ -6,7 +6,10 @@
     <title>连载中 · 作品列表 | XYZ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .dark { background-color: #0c1222; color: #e3e3e3; }
+        .dark {
+            background-color: #0c1222;
+            color: #e3e3e3;
+        }
         .dark .bg-white { background-color: #1a1b26 !important; }
         .dark .bg-gray-50 { background-color: #111827 !important; }
         .dark .border-gray-200 { border-color: #2d3748 !important; }
@@ -16,133 +19,218 @@
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+
+        /* 移动端菜单动画 */
+        .mobile-menu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .mobile-menu.open { max-height: 300px; }
+
+        /* 邮票卡片基础 */
+        .stamp-card {
+            background-color: white;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+        .dark .stamp-card {
+            background-color: #1a1b26;
+        }
+        .stamp-card {
+            position: relative;
+            margin: 12px;
+        }
+        /* 上齿孔 */
+        .stamp-card::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 16px;
+            right: 16px;
+            height: 16px;
+            background: repeating-linear-gradient(90deg, transparent, transparent 12px, #fff 12px, #fff 24px);
+            background-repeat: repeat-x;
+            z-index: 2;
+        }
+        .dark .stamp-card::before {
+            background: repeating-linear-gradient(90deg, transparent, transparent 12px, #1a1b26 12px, #1a1b26 24px);
+        }
+        /* 下齿孔 */
+        .stamp-card::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 16px;
+            right: 16px;
+            height: 16px;
+            background: repeating-linear-gradient(90deg, transparent, transparent 12px, #fff 12px, #fff 24px);
+            background-repeat: repeat-x;
+            z-index: 2;
+        }
+        .dark .stamp-card::after {
+            background: repeating-linear-gradient(90deg, transparent, transparent 12px, #1a1b26 12px, #1a1b26 24px);
+        }
+        /* 左齿孔 */
+        .stamp-card .left-perf {
+            position: absolute;
+            top: 16px;
+            bottom: 16px;
+            left: -8px;
+            width: 16px;
+            background: repeating-linear-gradient(0deg, transparent, transparent 12px, #fff 12px, #fff 24px);
+            background-repeat: repeat-y;
+            z-index: 2;
+        }
+        .dark .stamp-card .left-perf {
+            background: repeating-linear-gradient(0deg, transparent, transparent 12px, #1a1b26 12px, #1a1b26 24px);
+        }
+        /* 右齿孔 */
+        .stamp-card .right-perf {
+            position: absolute;
+            top: 16px;
+            bottom: 16px;
+            right: -8px;
+            width: 16px;
+            background: repeating-linear-gradient(0deg, transparent, transparent 12px, #fff 12px, #fff 24px);
+            background-repeat: repeat-y;
+            z-index: 2;
+        }
+        .dark .stamp-card .right-perf {
+            background: repeating-linear-gradient(0deg, transparent, transparent 12px, #1a1b26 12px, #1a1b26 24px);
+        }
+
+        /* 封面样式：方形，居中内容，渐变背景 */
+        .book-cover {
+            width: 112px;  /* w-28 */
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+        .dark .book-cover {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
     </style>
 </head>
 <body class="bg-[#f8f9fa] dark:bg-[#0c1222] font-sans antialiased transition-colors duration-300">
 
+    <!-- 顶部导航栏（相同） -->
     <nav class="sticky top-0 z-50 w-full backdrop-blur-md bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800 transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center space-x-3"><a href="index.html" class="flex items-center space-x-2"><span class="text-2xl">📖</span><span class="font-bold text-xl text-gray-900 dark:text-white">XYZ</span></a></div>
                 <div class="hidden md:flex items-center space-x-6">
-                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition">首页</a>
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium">首页</a>
                     <a href="ongoing-series.html" class="text-blue-600 dark:text-blue-400 font-medium border-b-2 border-blue-500 pb-1">连载作品</a>
-                    <a href="completed-series.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition">完结作品</a>
+                    <a href="completed-series.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium">完结作品</a>
                 </div>
                 <div class="flex items-center space-x-4">
                     <a href="https://github.com/lyy351" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" /></svg></a>
                     <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg></a>
                     <button id="themeToggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-yellow-300"><span id="themeIcon" class="text-lg">🌙</span></button>
+                    <button id="menuBtn" class="md:hidden p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+                </div>
+            </div>
+            <div id="mobileMenu" class="mobile-menu md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+                <div class="flex flex-col space-y-3 py-4 px-2">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium pl-3">首页</a>
+                    <a href="ongoing-series.html" class="text-blue-600 dark:text-blue-400 font-medium border-l-2 border-blue-500 pl-3">连载作品</a>
+                    <a href="completed-series.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium pl-3">完结作品</a>
                 </div>
             </div>
         </div>
     </nav>
 
+    <!-- 头部区域 -->
     <div class="relative border-b border-gray-200 dark:border-gray-800 overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-white dark:from-[#111827] dark:via-[#0f172a] dark:to-[#0f172a]"></div>
         <div class="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
-            <div class="relative pt-8 md:pt-10 md:pb-12 pb-10">
+            <div class="relative pt-6 md:pt-10 md:pb-12 pb-8">
                 <div class="relative z-10">
-                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight mb-5 max-w-4xl">📖 连载作品</h1>
-                    <p class="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mb-1">正在更新中的故事，与你一同见证成长。</p>
-                    <div class="mt-5 flex flex-wrap items-center gap-2.5">
-                        <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-semibold bg-white/90 text-gray-700 dark:bg-gray-800/90 dark:text-gray-300 ring-1 ring-gray-200 dark:ring-gray-700 shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg> <span id="totalCount">0</span> 部作品</span>
+                    <h1 class="text-2xl sm:text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight mb-4 max-w-4xl">📖 连载作品</h1>
+                    <p class="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mb-1">正在更新中的故事，与你一同见证成长。</p>
+                    <div class="mt-4 flex flex-wrap items-center gap-2">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/90 text-gray-700 dark:bg-gray-800/90 dark:text-gray-300 ring-1 ring-gray-200 dark:ring-gray-700 shadow-sm"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg> <span id="totalCount">0</span> 部作品</span>
                     </div>
                 </div>
-                <div class="absolute bottom-4 right-2 sm:right-4 md:right-6 pointer-events-none select-none opacity-20 dark:opacity-15"><span class="text-7xl sm:text-8xl">📖</span></div>
+                <div class="absolute bottom-2 right-2 sm:right-4 md:right-6 pointer-events-none select-none opacity-20 dark:opacity-15"><span class="text-5xl sm:text-7xl md:text-8xl">📖</span></div>
             </div>
         </div>
     </div>
 
-    <div class="max-w-6xl mx-auto px-4 pt-10 flex justify-center">
-        <div class="inline-flex bg-gray-200/50 dark:bg-gray-800/50 rounded-full p-1.5 shadow-inner">
-            <button id="tab-original" class="tab-btn px-8 py-2.5 rounded-full text-base font-bold transition-all duration-300 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-[0_2px_10px_rgba(0,0,0,0.1)] dark:shadow-[0_2px_10px_rgba(0,0,0,0.3)]">原创小说</button>
-            <button id="tab-doujin" class="tab-btn px-8 py-2.5 rounded-full text-base font-bold transition-all duration-300 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-800">同人小说</button>
+    <!-- 标签切换 -->
+    <div class="max-w-6xl mx-auto px-4 pt-6 md:pt-10 flex justify-center">
+        <div class="inline-flex bg-gray-200/50 dark:bg-gray-800/50 rounded-full p-1 shadow-inner">
+            <button id="tab-original" class="tab-btn px-4 md:px-8 py-2 rounded-full text-sm md:text-base font-bold transition-all duration-300 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-[0_2px_10px_rgba(0,0,0,0.1)] dark:shadow-[0_2px_10px_rgba(0,0,0,0.3)]">原创小说</button>
+            <button id="tab-doujin" class="tab-btn px-4 md:px-8 py-2 rounded-full text-sm md:text-base font-bold transition-all duration-300 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-800">同人小说</button>
         </div>
     </div>
 
-    <div class="max-w-6xl mx-auto px-4 py-8">
-        <div id="original-list" class="space-y-8"></div>
-        <div id="doujin-list" class="space-y-8 hidden"></div>
+    <div class="max-w-6xl mx-auto px-4 py-6 md:py-8">
+        <div id="original-list" class="space-y-6 md:space-y-8"></div>
+        <div id="doujin-list" class="space-y-6 md:space-y-8 hidden"></div>
     </div>
 
-    <footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 pt-8 pb-6 text-center text-sm text-gray-500 mt-12">
+    <footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-6 md:py-8 text-center text-sm text-gray-500 mt-8 md:mt-12">
         <p>© 2025 XYZ · 故事储藏室</p>
         <p class="mt-1 text-xs">📧 联系作者：<a href="mailto:your@email.com" class="hover:text-blue-600">your@email.com</a></p>
     </footer>
 
     <script>
+        // 深色模式
         const themeToggle = document.getElementById('themeToggle'), html = document.documentElement, icon = document.getElementById('themeIcon');
         if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) { html.classList.add('dark'); icon.innerText = '☀️'; } else { icon.innerText = '🌙'; }
         themeToggle.addEventListener('click', () => { if (html.classList.contains('dark')) { html.classList.remove('dark'); localStorage.setItem('theme', 'light'); icon.innerText = '🌙'; } else { html.classList.add('dark'); localStorage.setItem('theme', 'dark'); icon.innerText = '☀️'; } });
 
-        // ========== 连载作品数据（请替换为你的作品） ==========
+        // 移动端菜单
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('open'); });
+
+        // 连载作品数据
         const novels = {
             original: [
-                { 
-                    title: "《灵境行者》", 
-                    desc: "一个关于梦境与现实交织的奇幻冒险。主角意外获得进入他人梦境的能力，却发现自己卷入了一场跨越千年的阴谋。", 
-                    status: "released", 
-                    links: [
-                        { type: "doc", title: "阅读第一章", link: "#" },
-                        { type: "doc", title: "世界观设定", link: "#" }
-                    ] 
-                }
+                { title: "《灵境行者》", desc: "一个关于梦境与现实交织的奇幻冒险。主角意外获得进入他人梦境的能力，却发现自己卷入了一场跨越千年的阴谋。", status: "released", links: [{ type: "doc", title: "阅读第一章", link: "#" }, { type: "doc", title: "世界观设定", link: "#" }] }
             ],
             doujin: [
-                { 
-                    title: "《代码与玫瑰》", 
-                    desc: "程序员与插画师的都市爱情故事。当二进制世界遇上色彩斑斓的艺术，会擦出怎样的火花？", 
-                    status: "released", 
-                    links: [
-                        { type: "doc", title: "阅读全文", link: "#" },
-                        { type: "video", title: "番外特典", link: "#" }
-                    ] 
-                }
+                { title: "《代码与玫瑰》", desc: "程序员与插画师的都市爱情故事。当二进制世界遇上色彩斑斓的艺术，会擦出怎样的火花？", status: "released", links: [{ type: "doc", title: "阅读全文", link: "#" }, { type: "video", title: "番外特典", link: "#" }] }
             ]
         };
-        // ==================================================
 
         function renderCard(item) {
             const isLocked = item.status !== "released";
-            // 状态徽章颜色和文字
-            let statusBadge;
-            if (isLocked) {
-                statusBadge = '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black bg-gray-400 text-white ring-4 ring-gray-400/20 shadow-sm">🔒 待更新</span>';
-            } else {
-                statusBadge = '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black bg-emerald-500 text-white ring-4 ring-emerald-400/30 shadow-sm"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> 连载中</span>';
-            }
-            return `<div class="relative group/ticket mx-2 sm:mx-0 transition-transform duration-300 ${!isLocked ? 'hover:-translate-y-1' : ''}">
-                <div class="relative">
-                    <div class="absolute left-0 right-0 -top-[9px] h-[10px] overflow-hidden"><svg width="100%" height="10" preserveAspectRatio="none" class="block"><defs><pattern id="zigzag-h-top" width="20" height="10" patternUnits="userSpaceOnUse"><polygon points="0,10 10,0 20,10" class="fill-white dark:fill-gray-900"></polygon></pattern></defs><rect width="100%" height="10" fill="url(#zigzag-h-top)"></rect></svg></div>
-                    <div class="absolute left-0 right-0 -bottom-[9px] h-[10px] overflow-hidden"><svg width="100%" height="10" preserveAspectRatio="none" class="block"><defs><pattern id="zigzag-h-bottom" width="20" height="10" patternUnits="userSpaceOnUse"><polygon points="0,0 10,10 20,0" class="fill-white dark:fill-gray-900"></polygon></pattern></defs><rect width="100%" height="10" fill="url(#zigzag-h-bottom)"></rect></svg></div>
-                    <div class="bg-white dark:bg-gray-900 overflow-hidden lg:rounded-none rounded-xl transition-shadow duration-300 ${isLocked ? 'shadow-[0_2px_12px_rgba(0,0,0,0.05)] dark:shadow-[0_2px_12px_rgba(0,0,0,0.2)]' : 'shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.3)] group-hover/ticket:shadow-[0_12px_40px_rgba(0,0,0,0.15)] dark:group-hover/ticket:shadow-[0_12px_40px_rgba(0,0,0,0.5)]'}">
-                        <div class="flex flex-col lg:flex-row ${isLocked ? 'grayscale opacity-60' : ''}">
-                            <div class="lg:w-40 shrink-0 flex flex-row lg:flex-col items-center justify-center gap-4 p-5 sm:p-6 lg:py-7 relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50/60 dark:from-gray-900 dark:via-gray-900 dark:to-slate-800/70">
-                                <div class="absolute inset-0 border-r border-slate-100/80 dark:border-slate-700/60"></div>
-                                <div class="relative z-10 w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center"><span class="text-5xl">📖</span></div>
-                                <div class="relative z-10">${statusBadge}</div>
-                            </div>
-                            <div class="flex-1 relative">
-                                <div class="px-6 sm:px-8 pt-6 pb-4">
-                                    <div class="flex items-start gap-4">
-                                        <div class="flex-1 min-w-0">
-                                            <h2 class="text-2xl sm:text-3xl font-black tracking-tight leading-tight ${isLocked ? 'text-gray-400' : 'text-gray-900 dark:text-white'}">${item.title}</h2>
-                                            <p class="text-sm leading-relaxed mt-2 ${isLocked ? 'text-gray-400' : 'text-gray-500 dark:text-gray-400'}">${item.desc}</p>
-                                        </div>
-                                        <div class="shrink-0 mt-1"><div class="relative inline-flex items-center justify-center select-none px-3.5 py-1.5" style="transform: rotate(-6deg); color: ${isLocked ? '#9ca3af' : '#c41e1e'}"><div class="absolute inset-0 border-[2.5px] border-current rounded-sm opacity-80"></div><div class="absolute inset-[4px] border-[1.5px] border-current rounded-sm opacity-40"></div><span class="relative text-sm font-black tracking-widest leading-none">原创</span></div></div>
-                                    </div>
-                                </div>
-                                <div class="mx-6 sm:mx-8 border-t border-gray-100 dark:border-gray-800"></div>
-                                <div class="px-6 sm:px-8 py-5 ${isLocked ? 'pointer-events-none select-none' : ''}">
-                                    <div class="flex flex-wrap gap-2.5">${item.links.map(link => `<a href="${link.link}" target="_blank" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-bold no-underline transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 ring-1 ring-blue-200 dark:ring-blue-800"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> ${link.title}</a>`).join('')}</div>
-                                </div>
-                                ${isLocked ? `<div class="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"><div class="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm shadow-lg border border-gray-200 dark:border-gray-700"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="text-xs font-bold text-gray-500">筹备中</span></div></div>` : ''}
-                            </div>
-                        </div>
+            // 左侧封面区域（模拟书封面）
+            const coverArea = `
+                <div class="book-cover w-28 h-auto py-4 flex flex-col items-center justify-center gap-2">
+                    <div class="text-5xl">📖</div>
+                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black ${isLocked ? 'bg-gray-400 text-white ring-4 ring-gray-400/20' : 'bg-emerald-500 text-white ring-4 ring-emerald-400/30 shadow-sm'}">
+                        ${isLocked ? '待更新' : '<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> 连载中'}
                     </div>
                 </div>
-            </div>`;
+            `;
+            // 右侧内容区域
+            const rightArea = `
+                <div class="flex-1 p-4">
+                    <div class="flex flex-col sm:flex-row items-start justify-between gap-2">
+                        <h2 class="text-lg md:text-xl font-black tracking-tight text-gray-900 dark:text-white">${item.title}</h2>
+                        <div class="relative inline-flex items-center justify-center select-none px-2 py-0.5 text-xs font-black tracking-widest bg-gray-100 dark:bg-gray-700 rounded-sm" style="color: #c41e1e; transform: rotate(-6deg);">原创</div>
+                    </div>
+                    <p class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-2 leading-relaxed line-clamp-3">${item.desc}</p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        ${item.links.map(link => `<a href="${link.link}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold no-underline transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 ring-1 ring-blue-200 dark:ring-blue-800"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> ${link.title}</a>`).join('')}
+                    </div>
+                </div>
+            `;
+            return `
+                <div class="relative stamp-card group ${isLocked ? 'opacity-60 grayscale' : ''} hover:shadow-xl transition-all duration-300">
+                    <div class="left-perf"></div>
+                    <div class="right-perf"></div>
+                    <div class="flex flex-row bg-white dark:bg-[#1a1b26] overflow-hidden">
+                        ${coverArea}
+                        ${rightArea}
+                    </div>
+                </div>
+            `;
         }
 
         function renderList(type) {
@@ -154,10 +242,6 @@
             const total = novels.original.length + novels.doujin.length;
             document.getElementById('totalCount') && (document.getElementById('totalCount').innerText = total);
         }
-
-        // 初始化渲染两个列表
-        renderList('original');
-        renderList('doujin');
 
         // 标签切换逻辑
         const tabOriginal = document.getElementById('tab-original');
@@ -186,8 +270,8 @@
         tabOriginal.addEventListener('click', () => setActiveTab('original'));
         tabDoujin.addEventListener('click', () => setActiveTab('doujin'));
 
-        // 默认显示原创列表（已经在上面渲染过了，但确保隐藏同人）
-        setActiveTab('original');
+        renderList('original');
+        renderList('doujin');
     </script>
 </body>
 </html>
