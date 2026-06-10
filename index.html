@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>首页 | XYZ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 深色模式基础 */
+        .dark {
+            background-color: #0c1222;
+            color: #e3e3e3;
+        }
+        .dark .bg-white { background-color: #1a1b26 !important; }
+        .dark .bg-gray-50 { background-color: #111827 !important; }
+        .dark .bg-gray-100 { background-color: #1f2937 !important; }
+        .dark .border-gray-200 { border-color: #2d3748 !important; }
+        .dark .text-gray-600 { color: #9ca3af !important; }
+        .dark .text-gray-700 { color: #d1d5db !important; }
+        .dark .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5), 0 4px 6px -2px rgba(0,0,0,0.3) !important; }
+        
+        html { scroll-behavior: smooth; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.02); }
+        .navbar-fixed { backdrop-filter: blur(8px); background-color: rgba(255,255,255,0.9); }
+        .dark .navbar-fixed { background-color: rgba(17,24,39,0.9); }
+        
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+    </style>
+</head>
+<body class="bg-[#f8f9fa] dark:bg-[#0c1222] font-sans antialiased transition-colors duration-300">
+
+    <!-- 顶部导航栏 -->
+    <nav class="sticky top-0 z-50 w-full backdrop-blur-md bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <span class="text-2xl">📖</span>
+                        <span class="font-bold text-xl text-gray-900 dark:text-white">XYZ</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="text-blue-600 dark:text-blue-400 font-medium border-b-2 border-blue-500 pb-1">首页</a>
+                    <a href="ongoing-series.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition">连载作品</a>
+                    <a href="completed-series.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition">完结作品</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="https://github.com/lyy351" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                    </a>
+                    <button id="themeToggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-yellow-300 transition">
+                        <span id="themeIcon" class="text-lg">🌙</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="min-h-screen">
+        <div class="relative bg-white dark:bg-[#151b2d] border-b border-gray-200 dark:border-gray-800 pt-16 pb-24 overflow-hidden">
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] pointer-events-none"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
+                <div class="text-center md:text-left">
+                    <div class="inline-block px-5 py-2 mb-5 bg-yellow-400 text-black font-black text-sm md:text-base uppercase tracking-wider transform -rotate-1 shadow-sm rounded-md">
+                        📚 故事储藏室
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-black text-gray-900 dark:text-white mb-6 leading-tight tracking-tight">小说储藏室</h1>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 font-medium max-w-lg mx-auto md:mx-0 leading-relaxed">
+                        这里存放着一些故事。<br>有的正在慢慢生长，有的已经完结落幕。<br>点击下方卡片，开始阅读。
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center md:items-start gap-3 mb-4">
+                        <a href="ongoing-series.html" class="inline-flex h-14 items-center justify-center gap-2 px-6 rounded-xl border-2 border-transparent bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-bold leading-none hover:opacity-90 transition-opacity min-w-[220px] cursor-pointer shadow-md">
+                            📖 浏览连载作品
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </a>
+                        <a href="completed-series.html" class="inline-flex h-14 items-center justify-center gap-2 px-6 rounded-xl border-2 border-gray-900/15 dark:border-white/20 bg-white/80 dark:bg-transparent text-gray-900 dark:text-white text-sm font-bold leading-none no-underline hover:bg-white dark:hover:bg-white/10 transition-colors min-w-[220px] cursor-pointer">
+                            🏆 浏览完结作品
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="relative h-64 w-full flex items-end justify-center">
+                    <div class="relative z-10 group">
+                        <div class="w-32 h-32 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-5xl shadow-2xl">📖</div>
+                    </div>
+                    <div class="absolute bottom-2 left-1/4 -translate-x-1/2 group cursor-pointer hover:-translate-y-2 transition-transform duration-500">
+                        <div class="w-20 h-20 bg-blue-200 dark:bg-blue-800 rounded-lg shadow-lg flex items-center justify-center text-4xl">✨</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <a href="ongoing-series.html" class="group relative block h-full no-underline hover:no-underline">
+                    <div class="relative h-full transition-all duration-500 hover:-translate-y-2 hover:shadow-xl rounded-xl">
+                        <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-0 group-hover:opacity-40 transition duration-500"></div>
+                        <div class="relative h-full bg-white dark:bg-[#1a1b26] rounded-xl border-2 border-gray-200 dark:border-gray-700 group-hover:border-blue-500/50 p-6 overflow-hidden flex flex-col min-h-[220px] justify-center items-center text-center">
+                            <div class="text-6xl mb-4">📖</div>
+                            <h2 class="text-3xl font-black text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 transition-colors">连载中</h2>
+                            <p class="text-gray-500 dark:text-gray-400 max-w-xs">正在更新中的故事，与你一同见证成长。</p>
+                            <div class="mt-6 text-blue-600 font-bold group-hover:translate-x-2 transition">查看所有连载 →</div>
+                        </div>
+                    </div>
+                </a>
+                <a href="completed-series.html" class="group relative block h-full no-underline hover:no-underline">
+                    <div class="relative h-full transition-all duration-500 hover:-translate-y-2 hover:shadow-xl rounded-xl">
+                        <div class="absolute -inset-0.5 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl blur opacity-0 group-hover:opacity-40 transition duration-500"></div>
+                        <div class="relative h-full bg-white dark:bg-[#1a1b26] rounded-xl border-2 border-gray-200 dark:border-gray-700 group-hover:border-emerald-500/50 p-6 overflow-hidden flex flex-col min-h-[220px] justify-center items-center text-center">
+                            <div class="text-6xl mb-4">🏆</div>
+                            <h2 class="text-3xl font-black text-gray-900 dark:text-white mb-2 group-hover:text-emerald-600 transition-colors">已完结</h2>
+                            <p class="text-gray-500 dark:text-gray-400 max-w-xs">完整的故事，可以一口气读完。</p>
+                            <div class="mt-6 text-emerald-600 font-bold group-hover:translate-x-2 transition">查看所有完结 →</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-8 text-center text-sm text-gray-500">
+        <p>© 2025 XYZ · 故事储藏室</p>
+        <p class="mt-1 text-xs">📧 联系作者：<a href="mailto:your@email.com" class="hover:text-blue-600">your@email.com</a></p>
+    </footer>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+        const themeIcon = document.getElementById('themeIcon');
+        const isDark = localStorage.getItem('theme') === 'dark' || (window.matchMedia('(prefers-color-scheme: dark)').matches && !localStorage.getItem('theme'));
+        if (isDark) { htmlElement.classList.add('dark'); themeIcon.innerText = '☀️'; } else { htmlElement.classList.remove('dark'); themeIcon.innerText = '🌙'; }
+        themeToggle.addEventListener('click', () => {
+            if (htmlElement.classList.contains('dark')) { htmlElement.classList.remove('dark'); localStorage.setItem('theme', 'light'); themeIcon.innerText = '🌙'; } 
+            else { htmlElement.classList.add('dark'); localStorage.setItem('theme', 'dark'); themeIcon.innerText = '☀️'; }
+        });
+    </script>
+</body>
+</html>
