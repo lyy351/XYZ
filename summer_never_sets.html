@@ -342,7 +342,9 @@
                 <h1>夏日永不下坠</h1>
                 <p class="sub">［我变美的那个夏天］</p>
                 <p>Summer &amp; Conrad</p>
+                <!-- ===== 修改点：作者名改为 XYZ ===== -->
                 <p class="author">作者：XYZ</p>
+                <!-- 原为 作者：ATSITPFANFICTION，现已修改 -->
             </div>
         </div>
 
@@ -362,7 +364,6 @@
     <script>
         // ========== 启动页逻辑 ==========
         window.addEventListener("load", function () {
-            // === 修改点：将 2200 改为 800（毫秒） ===
             setTimeout(function () {
                 const splash = document.getElementById("splash-screen");
                 splash.classList.add("hide");
@@ -371,9 +372,9 @@
                     splash.classList.add("hidden");
                     const main = document.getElementById("main");
                     main.classList.add("show");
-                    showPage(1); // 默认显示书名页
+                    showPage(1);
                 }, 1200);
-            }, 800); // <--- 这里从 2200 改为 800
+            }, 800);
         });
 
         // ========== 正文翻页逻辑 ==========
