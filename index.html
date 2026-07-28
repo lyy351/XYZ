@@ -94,7 +94,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    flex: 1;  /* 撑满中间区域 */
+    flex: 1;
   }
 
   #loading-btn::after {
@@ -148,7 +148,7 @@
     pointer-events: none;
   }
 
-  /* ===== 以下为主页面样式（完全不变） ===== */
+  /* ===== 主页面样式 ===== */
   body {
     margin: 0;
     min-height: 100vh;
@@ -260,14 +260,6 @@
     text-align: center;
     transition: background 0.2s, 0.3s;
   }
-  .input:checked + .btn {
-    --primary: #8B00FF;
-    --shadow-primary: #00e572;
-  }
-  .input:hover + .btn {
-    --primary: #cc133c;
-    --font-size: 11px;
-  }
   .btn:after, .btn:before {
     content: '';
     position: absolute;
@@ -329,7 +321,21 @@
     background: var(--primary);
     z-index: -1;
   }
-  /* 原有glitch关键帧（给原创/同人用的） */
+  /* ===== 关键修改：:checked 放在 :hover 之后，确保选中状态覆盖 hover ===== */
+  .input:checked + .btn {
+    --primary: #8B00FF;
+    --shadow-primary: #00e572;
+  }
+
+  /* 悬停效果只对支持悬停的设备生效，并放在 :checked 之前（但实际顺序不重要，因为已用 @media 包裹） */
+  @media (hover: hover) {
+    .input:hover + .btn {
+      --primary: #cc133c;
+      --font-size: 11px;
+    }
+  }
+
+  /* 原有的 glitch 动画（原创/同人专用） */
   @keyframes glitch {
     0% { clip-path: var(--clip-one); }
     2%, 8% { clip-path: var(--clip-two); transform: translate(calc(var(--shimmy-distance) * -1%), 0); }
@@ -420,13 +426,8 @@
 
   <!-- ===== 加载过渡层（纯黑背景） ===== -->
   <div id="loading-overlay">
-    <!-- 顶部按钮 -->
     <div class="overlay-btn top"></div>
-
-    <!-- 中间全屏文字 -->
     <button id="loading-btn">XYZ</button>
-
-    <!-- 底部按钮 -->
     <div class="overlay-btn bottom"></div>
   </div>
 
