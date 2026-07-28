@@ -594,7 +594,8 @@
         const span = document.createElement('span');
         span.textContent = book.title;
         p.appendChild(span);
-        // 点击弹出书名
+
+        // 单击弹出书名
         p.addEventListener('click', function(e) {
           e.stopPropagation();
           toast.textContent = `你点击了: ${book.title}`;
@@ -604,6 +605,18 @@
             toast.classList.remove('show');
           }, 2000);
         });
+
+        // ===== 双击跳转（仅对 SUMMER NEVER SETS 生效） =====
+        if (book.title === 'SUMMER NEVER SETS') {
+          p.addEventListener('dblclick', function(e) {
+            e.stopPropagation();
+            window.open('https://lyy351.github.io/XYZ/summer_never_sets.html', '_blank');
+          });
+          // 添加视觉提示：光标样式改为 pointer，并加一个下划线表示可双击
+          p.style.cursor = 'pointer';
+          // 也可加一个微弱的提示标记，但不强制
+        }
+
         container.appendChild(p);
       });
 
