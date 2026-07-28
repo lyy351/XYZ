@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes" />
+    <!-- 添加 referrer 策略，解决图床防盗链 -->
+    <meta name="referrer" content="no-referrer" />
     <title>夏日永不下坠</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet" />
 
@@ -130,10 +132,13 @@
         #main {
             position: fixed;
             inset: 0;
-            /* 背景图片已替换为新 URL */
+            /* 背景图片 + 后备颜色 */
+            background-color: #1a2a3a; /* 后备深色背景 */
             background-image: url('https://s41.ax1x.com/2026/07/28/pmWrWq0.png');
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
+            /* 确保图片覆盖 */
             opacity: 0;
             transition: opacity 1s ease;
             pointer-events: none;
@@ -363,7 +368,6 @@
     <script>
         // ========== 启动页逻辑 ==========
         window.addEventListener("load", function () {
-            // === 修改点：将延迟从 800 改为 2000（毫秒），确保文字完全显示 ===
             setTimeout(function () {
                 const splash = document.getElementById("splash-screen");
                 splash.classList.add("hide");
@@ -374,7 +378,7 @@
                     main.classList.add("show");
                     showPage(1);
                 }, 1200);
-            }, 2000); // <--- 这里改为 2000
+            }, 2000);
         });
 
         // ========== 正文翻页逻辑 ==========
