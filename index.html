@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>互动卡片 + 加载过渡</title>
+<title>互动卡片 · 自适应分页</title>
 <style>
   * {
     margin: 0;
@@ -28,7 +28,6 @@
     align-items: center;
   }
 
-  /* 过渡层内的顶部和底部按钮（与主页面样式相同） */
   .overlay-btn,
   .overlay-btn::after {
     display: block;
@@ -72,7 +71,6 @@
     animation: blink 6s ease-in-out infinite;
   }
 
-  /* 中间全屏文字（无背景，故障动画） */
   #loading-btn,
   #loading-btn::after {
     display: block;
@@ -142,7 +140,6 @@
     100% { opacity: 1; }
   }
 
-  /* 加载完成后淡出隐藏 */
   #loading-overlay.fade-out {
     opacity: 0;
     pointer-events: none;
@@ -207,7 +204,7 @@
     animation: blink 6s ease-in-out infinite;
   }
 
-  /* 原创/同人 按钮组 */
+  /* ===== 原创/同人切换按钮 ===== */
   .container {
     display: flex;
     flex-direction: row;
@@ -321,21 +318,16 @@
     background: var(--primary);
     z-index: -1;
   }
-  /* ===== 关键修改：:checked 放在 :hover 之后，确保选中状态覆盖 hover ===== */
   .input:checked + .btn {
     --primary: #8B00FF;
     --shadow-primary: #00e572;
   }
-
-  /* 悬停效果只对支持悬停的设备生效，并放在 :checked 之前（但实际顺序不重要，因为已用 @media 包裹） */
   @media (hover: hover) {
     .input:hover + .btn {
       --primary: #cc133c;
       --font-size: 11px;
     }
   }
-
-  /* 原有的 glitch 动画（原创/同人专用） */
   @keyframes glitch {
     0% { clip-path: var(--clip-one); }
     2%, 8% { clip-path: var(--clip-two); transform: translate(calc(var(--shimmy-distance) * -1%), 0); }
@@ -354,51 +346,100 @@
     31%, 61%, 100% { clip-path: var(--clip-four); }
   }
 
-  /* 卡片 */
+  /* ===== 自适应卡片容器样式 ===== */
+  .card-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+    width: 100%;
+    padding: 0 10px;
+  }
+
   .card {
-    width: 210px;
     height: 254px;
     border-radius: 4px;
     background: #212121;
     display: flex;
     gap: 5px;
-    padding: .4em;
+    padding: 0.4em;
+    width: auto;
+    justify-content: center;
+    transition: width 0.2s;
   }
+
   .card p {
     height: 100%;
     flex: 1;
     overflow: hidden;
     cursor: pointer;
     border-radius: 2px;
-    transition: all .5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: all 0.5s;
     background: #212121;
     border: 1px solid #ff5a91;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0;
-    user-select: none;
-    position: relative;
   }
+
   .card p:hover {
     flex: 4;
   }
+
   .card p span {
     min-width: 14em;
-    padding: .5em;
+    padding: 0.5em;
     text-align: center;
     transform: rotate(-90deg);
-    transition: all .5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: all 0.5s;
     text-transform: uppercase;
     color: #ff568e;
-    letter-spacing: .1em;
-    font-size: 14px;
+    letter-spacing: 0.1em;
+    font-size: 12px;
     font-weight: bold;
+    white-space: nowrap;
   }
+
   .card p:hover span {
     transform: rotate(0);
   }
 
+  /* ===== 箭头按钮 ===== */
+  .arrow {
+    font-size: 28px;
+    color: #ff568e;
+    cursor: pointer;
+    user-select: none;
+    padding: 8px 6px;
+    transition: 0.2s;
+    opacity: 0.6;
+    background: transparent;
+    border: none;
+    flex-shrink: 0;
+  }
+  .arrow:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  .arrow.disabled {
+    opacity: 0.2;
+    pointer-events: none;
+    cursor: default;
+  }
+
+  /* ===== 小屏适配 ===== */
+  @media (max-width: 600px) {
+    .card p span {
+      font-size: 10px;
+      min-width: 10em;
+    }
+    .arrow {
+      font-size: 22px;
+      padding: 4px 4px;
+    }
+  }
+
+  /* ===== Toast ===== */
   .toast {
     position: fixed;
     bottom: 40px;
@@ -424,7 +465,7 @@
 </head>
 <body>
 
-  <!-- ===== 加载过渡层（纯黑背景） ===== -->
+  <!-- ===== 加载过渡层 ===== -->
   <div id="loading-overlay">
     <div class="overlay-btn top"></div>
     <button id="loading-btn">XYZ</button>
@@ -453,10 +494,11 @@
     </div>
   </div>
 
-  <div class="card">
-    <p data-label="选项一"><span>HOVER ME</span></p>
-    <p data-label="选项二"><span>HOVER ME</span></p>
-    <p data-label="选项三"><span>HOVER ME</span></p>
+  <!-- ===== 自适应卡片组件 ===== -->
+  <div class="card-wrapper">
+    <button class="arrow" id="prevBtn">←</button>
+    <div class="card" id="cardContainer"></div>
+    <button class="arrow" id="nextBtn">→</button>
   </div>
 
   <button class="xyz-btn bottom"></button>
@@ -464,7 +506,7 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    // 加载过渡：2秒后淡出
+    // ===== 加载过渡 =====
     window.addEventListener('load', function() {
       const overlay = document.getElementById('loading-overlay');
       setTimeout(function() {
@@ -475,20 +517,157 @@
       }, 2000);
     });
 
-    // 卡片交互
-    const items = document.querySelectorAll('.card p');
+    // ===== 数据：14本书（含分类） =====
+    const allBooks = [
+      { title: 'HOVER ME 1', category: 'original' },
+      { title: 'HOVER ME 2', category: 'fanfiction' },
+      { title: 'HOVER ME 3', category: 'original' },
+      { title: 'HOVER ME 4', category: 'fanfiction' },
+      { title: 'HOVER ME 5', category: 'original' },
+      { title: 'HOVER ME 6', category: 'fanfiction' },
+      { title: 'HOVER ME 7', category: 'original' },
+      { title: 'HOVER ME 8', category: 'fanfiction' },
+      { title: 'HOVER ME 9', category: 'original' },
+      { title: 'HOVER ME 10', category: 'fanfiction' },
+      { title: 'HOVER ME 11', category: 'original' },
+      { title: 'HOVER ME 12', category: 'fanfiction' },
+      { title: 'HOVER ME 13', category: 'original' },
+      { title: 'HOVER ME 14', category: 'fanfiction' }
+    ];
+
+    // ===== DOM引用 =====
+    const container = document.getElementById('cardContainer');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
     const toast = document.getElementById('toast');
-    items.forEach((item) => {
-      item.addEventListener('click', function(e) {
-        const label = this.getAttribute('data-label') || this.innerText.trim();
-        toast.textContent = `你点击了: ${label}`;
-        toast.classList.add('show');
-        clearTimeout(window.toastTimer);
-        window.toastTimer = setTimeout(() => {
-          toast.classList.remove('show');
-        }, 2000);
+
+    // ===== 状态 =====
+    let currentPage = 0;
+    let maxItems = 3;
+    let cardWidth = 210;
+    let currentCategory = 'original'; // 默认原创
+
+    // ===== 获取布局配置 =====
+    function getLayout() {
+      const w = window.innerWidth;
+      if (w < 768) {
+        return { max: 3, width: 210 };
+      } else {
+        return { max: 14, width: 1010 };
+      }
+    }
+
+    // ===== 获取当前分类的书籍列表 =====
+    function getFilteredBooks() {
+      return allBooks.filter(book => book.category === currentCategory);
+    }
+
+    // ===== 渲染卡片 =====
+    function render() {
+      const filtered = getFilteredBooks();
+      const total = filtered.length;
+      if (total === 0) {
+        container.innerHTML = ''; // 无数据显示空白
+        container.style.width = 'auto';
+        prevBtn.classList.add('disabled');
+        nextBtn.classList.add('disabled');
+        return;
+      }
+
+      const layout = getLayout();
+      maxItems = Math.min(layout.max, total); // 如果总数少于最大显示，则显示全部
+      cardWidth = layout.width;
+
+      // 如果当前页超出范围，修正
+      const totalPages = Math.ceil(total / maxItems);
+      if (currentPage >= totalPages) currentPage = totalPages - 1;
+      if (currentPage < 0) currentPage = 0;
+
+      const start = currentPage * maxItems;
+      const end = Math.min(start + maxItems, total);
+      const pageItems = filtered.slice(start, end);
+
+      // 生成 DOM
+      container.innerHTML = '';
+      pageItems.forEach(book => {
+        const p = document.createElement('p');
+        const span = document.createElement('span');
+        span.textContent = book.title;
+        p.appendChild(span);
+        // 点击弹出书名
+        p.addEventListener('click', function(e) {
+          e.stopPropagation();
+          toast.textContent = `你点击了: ${book.title}`;
+          toast.classList.add('show');
+          clearTimeout(window.toastTimer);
+          window.toastTimer = setTimeout(() => {
+            toast.classList.remove('show');
+          }, 2000);
+        });
+        container.appendChild(p);
+      });
+
+      // 设置卡片宽度
+      container.style.width = cardWidth + 'px';
+
+      // 更新箭头状态
+      const isSinglePage = totalPages === 1;
+      if (isSinglePage) {
+        prevBtn.classList.add('disabled');
+        nextBtn.classList.add('disabled');
+      } else {
+        prevBtn.classList.toggle('disabled', currentPage === 0);
+        nextBtn.classList.toggle('disabled', currentPage >= totalPages - 1);
+      }
+    }
+
+    // ===== 翻页 =====
+    function goTo(page) {
+      const filtered = getFilteredBooks();
+      const total = filtered.length;
+      if (total === 0) return;
+      const layout = getLayout();
+      const maxItems = Math.min(layout.max, total);
+      const totalPages = Math.ceil(total / maxItems);
+      if (page < 0 || page >= totalPages) return;
+      currentPage = page;
+      render();
+    }
+
+    // ===== 切换分类 =====
+    function setCategory(category) {
+      currentCategory = category;
+      currentPage = 0; // 重置到第一页
+      render();
+    }
+
+    // ===== 事件绑定 =====
+    prevBtn.addEventListener('click', () => goTo(currentPage - 1));
+    nextBtn.addEventListener('click', () => goTo(currentPage + 1));
+
+    // 监听原创/同人切换
+    const radios = document.querySelectorAll('input[name="mode"]');
+    radios.forEach(radio => {
+      radio.addEventListener('change', function() {
+        if (this.checked) {
+          const cat = this.id === 'value-1' ? 'original' : 'fanfiction';
+          setCategory(cat);
+        }
       });
     });
+
+    // ===== 窗口尺寸变化 =====
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        render(); // 重新计算布局
+      }, 200);
+    });
+
+    // ===== 初始化 =====
+    setCategory('original'); // 默认显示原创
+
   </script>
 
 </body>
